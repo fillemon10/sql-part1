@@ -113,47 +113,48 @@ CREATE OR REPLACE VIEW PathToGraduation AS (
     COALESCE((mathCredits >= 20 
     AND researchCredits >= 10 
     AND seminarCourses >= 1 
-    AND mandatoryLeft < 1
-    --AND (SELECT SUM (PassedCourses.credits) 
-    --FROM Students, RecommendedBranch, StudentBranches, PassedCourses 
-    --WHERE Students.program = RecommendedBranch.program AND StudentBranches.branch = RecommendedBranch.branch AND Students.idnr = StudentBranches.student AND PassedCourses.course = RecommendedBranch.course) >= 10)
-    ), FALSE)
-    AS qualified
+    AND COALESCE(mandatoryLeft, 0) = 0
+    AND recommendedBranchCredits >= 10), FALSE) AS qualified
     FROM
     Students
-    FULL OUTER JOIN
+    LEFT OUTER JOIN
     (SELECT PassedCourses.student, SUM (credits) AS totalCredits 
     FROM PassedCourses 
     GROUP BY PassedCourses.student)
     totalCredits
     ON Students.idnr = totalCredits.student
-    FULL OUTER JOIN
+    LEFT OUTER JOIN
     (SELECT UnreadMandatory.student, COUNT (course) AS mandatoryLeft
     FROM UnreadMandatory
     GROUP BY UnreadMandatory.student)
     mandatoryLeft
     ON Students.idnr = mandatoryLeft.student
-    FULL OUTER JOIN
+    LEFT OUTER JOIN
     (SELECT PassedCourses.student, SUM (credits) AS mathCredits
     FROM PassedCourses, Classified
     WHERE PassedCourses.course = Classified.course AND Classified.classifications = 'math'
     GROUP BY PassedCourses.student)
     mathCredits
     ON Students.idnr = mathCredits.student
-    FULL OUTER JOIN
+    LEFT OUTER JOIN
     (SELECT PassedCourses.student, SUM (credits) AS researchCredits
-    FROM PassedCourses, Students, Classified
+    FROM PassedCourses, Classified
     WHERE PassedCourses.course = Classified.course AND Classified.classifications = 'research'
-    AND PassedCourses.student = Students.idnr
     GROUP BY PassedCourses.student)
     researchCredits
     ON Students.idnr = researchCredits.student
-    FULL OUTER JOIN
+    LEFT OUTER JOIN
     (SELECT PassedCourses.student, COUNT (PassedCourses.course) AS seminarCourses
-    FROM PassedCourses, Students, Classified
+    FROM PassedCourses, Classified
     WHERE PassedCourses.course = Classified.course AND Classified.classifications = 'seminar'
-    AND PassedCourses.student = Students.idnr
     GROUP BY PassedCourses.student)
     seminarCourses
     ON Students.idnr = seminarCourses.student
-    );
+    LEFT OUTER JOIN
+    (SELECT PassedCourses.student, SUM (credits) AS recommendedBranchCredits
+    FROM PassedCourses, RecommendedBranch, Students
+    WHERE PassedCourses.course = RecommendedBranch.course AND Students.program = RecommendedBranch.program AND Students.idnr = PassedCourses.student
+    GROUP BY PassedCourses.student)
+    recommendedBranchCredits
+    ON Students.idnr = recommendedBranchCredits.student
+);
