@@ -33,7 +33,7 @@ i.e.courses finished with a grade other than 'U',
 and the number of credits for those courses.This view is intended as a helper view towards later views (
     and for part 4), and will not be directly used by your application. */
 CREATE OR REPLACE VIEW PassedCourses AS (
-    SELECT *
+    SELECT FinishedCourses.student, FinishedCourses.course, FinishedCourses.credits
     FROM FinishedCourses
     WHERE grade != 'U'
 );
@@ -132,21 +132,21 @@ CREATE OR REPLACE VIEW PathToGraduation AS (
     LEFT OUTER JOIN
     (SELECT PassedCourses.student, SUM (credits) AS mathCredits
     FROM PassedCourses, Classified
-    WHERE PassedCourses.course = Classified.course AND Classified.classifications = 'math'
+    WHERE PassedCourses.course = Classified.course AND Classified.classification = 'math'
     GROUP BY PassedCourses.student)
     mathCredits
     ON Students.idnr = mathCredits.student
     LEFT OUTER JOIN
     (SELECT PassedCourses.student, SUM (credits) AS researchCredits
     FROM PassedCourses, Classified
-    WHERE PassedCourses.course = Classified.course AND Classified.classifications = 'research'
+    WHERE PassedCourses.course = Classified.course AND Classified.classification = 'research'
     GROUP BY PassedCourses.student)
     researchCredits
     ON Students.idnr = researchCredits.student
     LEFT OUTER JOIN
     (SELECT PassedCourses.student, COUNT (PassedCourses.course) AS seminarCourses
     FROM PassedCourses, Classified
-    WHERE PassedCourses.course = Classified.course AND Classified.classifications = 'seminar'
+    WHERE PassedCourses.course = Classified.course AND Classified.classification = 'seminar'
     GROUP BY PassedCourses.student)
     seminarCourses
     ON Students.idnr = seminarCourses.student

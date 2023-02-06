@@ -36,10 +36,10 @@ CREATE TABLE Classifications(name TEXT PRIMARY KEY);
 
 CREATE TABLE Classified(
     course CHAR(6),
-    classifications TEXT,
-    PRIMARY KEY (course, classifications),
+    classification TEXT,
+    PRIMARY KEY (course, classification),
     FOREIGN KEY (course) REFERENCES Courses(code),
-    FOREIGN KEY (classifications) REFERENCES Classifications(name)
+    FOREIGN KEY (classification) REFERENCES Classifications(name)
 );
 
 CREATE TABLE MandatoryProgram(
@@ -78,7 +78,7 @@ CREATE TABLE Registered(
 CREATE TABLE Taken(
     student CHAR(10),
     course CHAR(6),
-    grade CHAR(1) DEFAULT 0,
+    grade CHAR(1) DEFAULT 0 NOT NULL,
     CONSTRAINT okgrade CHECK (grade IN ('U', '3', '4', '5')),
     PRIMARY KEY(course, student),
     FOREIGN KEY (student) REFERENCES Students(idnr),
@@ -88,7 +88,7 @@ CREATE TABLE Taken(
 CREATE TABLE WaitingList(
     student CHAR(10),
     course CHAR(6),
-    position TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    position TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     PRIMARY KEY(course, student),
     FOREIGN KEY (student) REFERENCES Students(idnr),
     FOREIGN KEY (course) REFERENCES LimitedCourses(code)
