@@ -1,0 +1,55 @@
+Students(_idnr,name,login,program)
+  program -> Programs.name
+  UNIQUE login
+
+Courses(_code,name,credits,department)
+  department -> Departments.name
+  
+  
+LimitedCourses(_code,capacity)
+  code -> Courses.code
+
+StudentBranches(_studentIdnr,branch)
+  studentIdnr -> Students.idnr
+  (branch) -> Branches.(name)
+
+Classifications(_name)
+
+Classified(_course,_classification)
+  course -> Courses.code
+  classification -> Classifications.name
+
+MandatoryProgram(_course,_program)
+  course -> Courses.code
+  program -> Programs.name
+
+MandatoryBranch(_course,_branch)
+  course -> Courses.code
+  branch -> Branches.name
+
+RecommendedBranch(_course,_branch)
+  course -> Courses.code
+  branch -> Branches.name
+
+Registered(_studentIdnr,_course)
+  studentIdnr -> Students.idnr
+  course -> Courses.code
+
+Taken(_studentIdnr,_course,grade)
+  studentIdnr -> Students.idnr
+  course -> Courses.code
+
+WaitingList(_studentIdnr,_course,position)
+  studentIdnr -> Students.idnr
+  course -> LimitedCourses.code
+
+Departments(_name,abrv)
+  UNIQUE abrv
+
+Programs(_name,abrv)
+
+Branches(_name)
+
+PrerequisiteCourses(_course,_prerequisiteCourse)
+  course -> Courses.code
+  prerequisiteCourse -> Courses.code

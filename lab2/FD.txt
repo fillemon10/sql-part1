@@ -1,0 +1,40 @@
+step 1. D(studentIdnr studentName login branchName programName courseCode courseName credits departmentName capacity classification grade position)
+
+step 2.
+studentIdnr -> studentName programName branchName login
+courseCode -> courseName credits departmentName capacity
+studentIdnr courseCode -> grade position
+login -> studentIdnr
+courseCode position -> studentIdnr
+
+
+
+step 3.
+Table 1:
+columns: courseCode courseName credits departmentName capacity
+keys: courseCode
+
+Table 2:
+columns: login studentIdnr studentName branchName programName
+keys: studentIdnr 
+login
+
+Table 3:
+columns: courseCode position login grade
+keys: courseCode login
+courseCode position
+
+Table 4: No further decomposition needed
+columns: courseCode classification position
+
+
+
+
+step 4.
+MVD:
+courseCode ->> classification
+courseCode ->> studentIdnr studentName login branchName programName courseCode courseName credits departmentName capacity grade position
+If X->>Y then X->>S −Y ;
+
+R1(courseCode, classification)
+R2(courseCode, studentIdnr, studentName, login, branchName, programName, courseCode, courseName, credits, departmentName, capacity, grade, position)
