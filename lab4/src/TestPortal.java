@@ -8,22 +8,48 @@ public class TestPortal {
    public static void main(String[] args) {
       try{
          PortalConnection c = new PortalConnection();
-   
-         // Write your tests here. Add/remove calls to pause() as desired. 
-         // Use println instead of prettyPrint to get more compact output (if your raw JSON is already readable)
-   
-         System.out.println(c.unregister("2222222222", "CCC333")); 
-         pause();
+         //1
+          prettyPrint(c.getInfo("2222222222"));
+          pause();
 
-         prettyPrint(c.getInfo("2222222222")); 
-         pause();
+          //2
+          System.out.println(c.register("2222222222", "CCC444"));
+          prettyPrint(c.getInfo("2222222222"));
+          pause();
 
-         System.out.println(c.register("2222222222", "CCC333")); 
-         pause();
+          //3
+          System.out.println(c.register("2222222222", "CCC444"));
+          pause();
 
-         prettyPrint(c.getInfo("2222222222"));
+          //4
+          System.out.println(c.unregister("2222222222", "CCC444"));
+          prettyPrint(c.getInfo("2222222222"));
+          System.out.println(c.unregister("2222222222", "CCC444"));
+          pause();
 
+          //5
+          System.out.println(c.register("2222222222", "CCC111"));
+          pause();
 
+          //6
+          System.out.println(c.unregister("1111111111", "CCC333"));
+          System.out.println(c.register("1111111111", "CCC333"));
+          prettyPrint(c.getInfo("1111111111"));
+          pause();
+
+          //7
+          System.out.println(c.unregister("2222222222", "CCC555"));
+          System.out.println(c.register("2222222222", "CCC555"));
+          prettyPrint(c.getInfo("2222222222"));
+          pause();
+
+          //8
+          System.out.println(c.unregister("1111111111", "CCC222"));
+          prettyPrint(c.getInfo("1111111111"));
+          pause();
+
+          //9
+          System.out.println(c.unregister("1111111111", "CCC555'; DELETE FROM Registered WHERE 'a'='a'; DELETE FROM WaitingList WHERE 'a'='a"));
 
       
       } catch (ClassNotFoundException e) {
