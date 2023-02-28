@@ -1,55 +1,62 @@
-Students(_idnr,name,login,program)
-  program -> Programs.name
+Students(_idnr,name,login,programName)
+  programName -> Program.name
   UNIQUE login
+  UNIQUE (idnr, program)
 
-Courses(_code,name,credits,department)
-  department -> Departments.name
-  
-  
-LimitedCourses(_code,capacity)
-  code -> Courses.code
-
-StudentBranches(_studentIdnr,branch)
-  studentIdnr -> Students.idnr
-  (branch) -> Branches.(name)
+Courses(_code,name,credits,departmentName)
+  departmentName -> Department.name
 
 Classifications(_name)
 
-Classified(_course,_classification)
-  course -> Courses.code
-  classification -> Classifications.name
-
-MandatoryProgram(_course,_program)
-  course -> Courses.code
-  program -> Programs.name
-
-MandatoryBranch(_course,_branch)
-  course -> Courses.code
-  branch -> Branches.name
-
-RecommendedBranch(_course,_branch)
-  course -> Courses.code
-  branch -> Branches.name
-
-Registered(_studentIdnr,_course)
-  studentIdnr -> Students.idnr
-  course -> Courses.code
-
-Taken(_studentIdnr,_course,grade)
-  studentIdnr -> Students.idnr
-  course -> Courses.code
-
-WaitingList(_studentIdnr,_course,position)
-  studentIdnr -> Students.idnr
-  course -> LimitedCourses.code
-
-Departments(_name,abrv)
+Department(_name,abrv)
   UNIQUE abrv
 
-Programs(_name,abrv)
+Program(_name,abrv)
 
-Branches(_name)
+Branches(_name,_program)
+  program -> Program.name
 
-PrerequisiteCourses(_course,_prerequisiteCourse)
-  course -> Courses.code
-  prerequisiteCourse -> Courses.code
+LimitedCourses(_code,capacity)
+  code -> Courses.code
+
+StudentBranches(_studentsIdnr,branchesName,branchesProgram)
+  (branchesName,branchesProgram) -> Branches.(name,program)
+  (studentsIdnr,branchesProgram) -> Students.(studentsIdnr,program)
+
+
+Classified(_coursesCode,_classificationsName)
+  coursesCode -> Courses.code
+  classificationsName -> Classifications.name
+
+MandatoryProgram(_coursesCode,_programName)
+  coursesCode -> Courses.code
+  programName -> Program.name
+
+MandatoryBranch(_coursesCode,_branchesName,_branchesProgram)
+  coursesCode -> Courses.code
+  (branchesName,branchesProgram) -> Branches.(name,program)
+
+RecommendedBranch(_coursesCode,_branchesName,_branchesProgram)
+  coursesCode -> Courses.code
+  (branchesName,branchesProgram) -> Branches.(name,program)
+
+Registered(_studentsIdnr,_coursesCode)
+  studentsIdnr -> Students.idnr
+  coursesCode -> Courses.code
+
+Taken(_studentsIdnr,_coursesCode,grade)
+  studentsIdnr -> Students.idnr
+  coursesCode -> Courses.code
+
+WaitingList(_studentsIdnr,_limitedCoursesCode,position)
+  studentsIdnr -> Students.idnr
+  limitedCoursesCode -> LimitedCourses.code
+  UNIQUE (limitedCoursesCode, position)
+
+PrerequisiteCourses(_coursesCode1,_coursesCode2)
+  coursesCode1 -> Courses.code
+  coursesCode2 -> Courses.code
+
+PartOfDepartment(_programName,_departmentName)
+  programName -> Program.name
+  departmentName -> Department.name

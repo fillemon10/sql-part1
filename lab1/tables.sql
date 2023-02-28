@@ -88,7 +88,7 @@ CREATE TABLE Taken(
 CREATE TABLE WaitingList(
     student CHAR(10),
     course CHAR(6),
-    position TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    position INT NOT NULL CHECK (position >= 0),
     PRIMARY KEY(course, student),
     FOREIGN KEY (student) REFERENCES Students(idnr),
     FOREIGN KEY (course) REFERENCES LimitedCourses(code)

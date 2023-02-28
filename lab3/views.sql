@@ -111,8 +111,7 @@ CREATE OR REPLACE VIEW PathToGraduation AS (
     AND COALESCE(researchCredits, 0) >= 10 
     AND COALESCE(seminarCourses, 0) >= 1 
     AND COALESCE(mandatoryLeft, 0) = 0
-    AND COALESCE(recommendedCredits, 0) >= 10), FALSE) AS qualified,
-    COALESCE(recommendedCredits, 0) AS recommendedCredits
+    AND COALESCE(recommendedCredits, 0) >= 10), FALSE) AS qualified
     FROM
     Students
     LEFT OUTER JOIN

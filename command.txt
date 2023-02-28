@@ -1,0 +1,1 @@
+\i C:/Users/filip/OneDrive/Skrivbord/sql-part1/lab3/runtests.sql

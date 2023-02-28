@@ -1,8 +1,12 @@
 ENTITY Students : _idnr name login
 ENTITY Courses : _code name credits 
+ENTITY Classifications : _name
+ENTITY Department : _name abrv
+ENTITY Program : _name abrv
+WEAK ENTITY Branches : _name _program
+
 ISA LimitedCourses Courses : capacity
 RELATIONSHIP StudentBranches Students -> Branches 
-ENTITY Classifications : _name
 RELATIONSHIP Classified Courses -- Classifications
 RELATIONSHIP MandatoryProgram Courses -- Program
 RELATIONSHIP MandatoryBranch Courses -- Branches
@@ -10,11 +14,8 @@ RELATIONSHIP RecommendedBranch Courses -- Branches
 RELATIONSHIP Registered Students -- Courses
 RELATIONSHIP Taken Students -- Courses : grade
 RELATIONSHIP WaitingList Students -- LimitedCourses : position
-RELATIONSHIP StudentProgram Students -) Program
-ENTITY Department : _name abrv
-WEAK ENTITY Program : _name abrv
-RELATIONSHIP PartOfDepartment Program -) Department
-WEAK ENTITY Branches : _name
+RELATIONSHIP PartOfDepartment Program -- Department
 RELATIONSHIP PartOfProgram Branches -) Program
 RELATIONSHIP GivenByDepartment Courses -) Department
+RELATIONSHIP BelongsTo Students -) Program
 RELATIONSHIP PrerequisiteCourses Courses -- Courses

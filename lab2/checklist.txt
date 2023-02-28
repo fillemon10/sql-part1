@@ -1,0 +1,12 @@
+
+
+In the ER-diagram: why is there an arrow in the prerequisite relation? can a course only have one prerequisite, and/or can a course only be a prerequisite for one other course?
+
+In the ER-schema there are a few problems:
+
+    One table is missing,
+    the Branches table is missing an attribute; as a consequence the primary key is wrong: are branch names unique?
+    Following the problem with Branches: RecommendedBranch & MandatoryBranch are wrong; they are missing an attribute, and both the primary key and the foreign key constraints are wrong
+    For the same reason, the StudentBranches is missing an attribute and the foreign key is wrong.
+
+The FDs and the BCNF are correct, but the MVDs and 4NF are not: you shouldn't find MVDs in (and apply the relative normalization algorithm to) the original domain, but to the schema in BCNF obtained from the FDs.

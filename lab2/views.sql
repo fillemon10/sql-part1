@@ -72,8 +72,8 @@ CREATE OR REPLACE VIEW UnreadMandatory AS (
     UNION
     (SELECT Students.idnr AS student, MandatoryBranch.course
     FROM StudentBranches, MandatoryBranch, Students
-    WHERE (Students.idnr, StudentBranches.branch, Students.program) 
-    = (StudentBranches.student, MandatoryBranch.branch, Students.program)
+    WHERE (Students.idnr, StudentBranches.branch, StudentBranches.program) 
+    = (StudentBranches.student, MandatoryBranch.branch, MandatoryBranch.program)
     AND (MandatoryBranch.course
     NOT IN (SELECT PassedCourses.course 
     FROM PassedCourses 
@@ -99,9 +99,6 @@ i.e.a view with columns for:
     seminarCourses: the number of seminar courses they have passed;
     qualified: whether or not they qualify for graduation. The SQL type of this field should be BOOLEAN (i.e. TRUE or FALSE).
 */
-
-
-
 CREATE OR REPLACE VIEW PathToGraduation AS (
     SELECT
     Students.idnr as student,
@@ -111,10 +108,11 @@ CREATE OR REPLACE VIEW PathToGraduation AS (
     COALESCE(researchCredits, 0) AS researchCredits,
     COALESCE(seminarCourses, 0) AS seminarCourses,
     COALESCE((mathCredits >= 20 
-    AND researchCredits >= 10 
-    AND seminarCourses >= 1 
+    AND COALESCE(researchCredits, 0) >= 10 
+    AND COALESCE(seminarCourses, 0) >= 1 
     AND COALESCE(mandatoryLeft, 0) = 0
-    AND recommendedBranchCredits >= 10), FALSE) AS qualified
+    AND COALESCE(recommendedCredits, 0) >= 10), FALSE) AS qualified,
+    COALESCE(recommendedCredits, 0) AS recommendedCredits
     FROM
     Students
     LEFT OUTER JOIN
@@ -151,10 +149,13 @@ CREATE OR REPLACE VIEW PathToGraduation AS (
     seminarCourses
     ON Students.idnr = seminarCourses.student
     LEFT OUTER JOIN
-    (SELECT PassedCourses.student, SUM (credits) AS recommendedBranchCredits
-    FROM PassedCourses, RecommendedBranch, Students, StudentBranches
-    WHERE PassedCourses.course = RecommendedBranch.course AND Students.idnr = PassedCourses.student AND Students.idnr = StudentBranches.student AND StudentBranches.branch = RecommendedBranch.branch
+    (SELECT PassedCourses.student, SUM (credits) AS recommendedCredits
+    FROM RecommendedBranch, PassedCourses, StudentBranches
+    WHERE PassedCourses.course = RecommendedBranch.course 
+    AND StudentBranches.student = PassedCourses.student 
+    AND StudentBranches.branch = RecommendedBranch.branch 
+    AND StudentBranches.program = RecommendedBranch.program
     GROUP BY PassedCourses.student)
-    recommendedBranchCredits
-    ON Students.idnr = recommendedBranchCredits.student
+    recommendedCredits
+    ON Students.idnr = recommendedCredits.student
 );

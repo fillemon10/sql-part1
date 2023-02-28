@@ -29,12 +29,12 @@ columns: courseCode classification position
 
 
 
-
 step 4.
-MVD:
-courseCode ->> classification
-courseCode ->> studentIdnr studentName login branchName programName courseCode courseName credits departmentName capacity grade position
-If X->>Y then X->>S −Y ;
 
+MVDs:
+courseCode ->> classification
+courseCode ->> position
+
+4NF:
 R1(courseCode, classification)
-R2(courseCode, studentIdnr, studentName, login, branchName, programName, courseCode, courseName, credits, departmentName, capacity, grade, position)
+R2(couseCode, position)

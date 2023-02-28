@@ -4,14 +4,21 @@ Students(_idnr,name,login,programName)
 Courses(_code,name,credits,departmentName)
   departmentName -> Department.name
 
+Classifications(_name)
+
+Department(_name,abrv)
+
+Program(_name,abrv)
+
+Branches(_name,_program)
+  program -> Program.name
+
 LimitedCourses(_code,capacity)
   code -> Courses.code
 
-StudentBranches(_studentsIdnr,branchesName)
+StudentBranches(_studentsIdnr,branchesName,branchesProgram)
   studentsIdnr -> Students.idnr
-  branchesName -> Branches.name
-
-Classifications(_name)
+  (branchesName,branchesProgram) -> Branches.(name,program)
 
 Classified(_coursesCode,_classificationsName)
   coursesCode -> Courses.code
@@ -21,13 +28,13 @@ MandatoryProgram(_coursesCode,_programName)
   coursesCode -> Courses.code
   programName -> Program.name
 
-MandatoryBranch(_coursesCode,_branchesName)
+MandatoryBranch(_coursesCode,_branchesName,_branchesProgram)
   coursesCode -> Courses.code
-  branchesName -> Branches.name
+  (branchesName,branchesProgram) -> Branches.(name,program)
 
-RecommendedBranch(_coursesCode,_branchesName)
+RecommendedBranch(_coursesCode,_branchesName,_branchesProgram)
   coursesCode -> Courses.code
-  branchesName -> Branches.name
+  (branchesName,branchesProgram) -> Branches.(name,program)
 
 Registered(_studentsIdnr,_coursesCode)
   studentsIdnr -> Students.idnr
@@ -41,12 +48,10 @@ WaitingList(_studentsIdnr,_limitedCoursesCode,position)
   studentsIdnr -> Students.idnr
   limitedCoursesCode -> LimitedCourses.code
 
-Department(_name,abrv)
-
-Program(_name,abrv)
-
-Branches(_name)
-
 PrerequisiteCourses(_coursesCode1,_coursesCode2)
   coursesCode1 -> Courses.code
   coursesCode2 -> Courses.code
+
+PartOfDepartment(_programName,_departmentName)
+  programName -> Program.name
+  departmentName -> Department.name

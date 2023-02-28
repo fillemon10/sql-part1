@@ -1,10 +1,19 @@
-INSERT INTO Programs VALUES ('Prog1','P1');
-INSERT INTO Programs VALUES ('Prog2','P2');
-
-
 INSERT INTO Branches VALUES ('B1','Prog1');
 INSERT INTO Branches VALUES ('B2','Prog1');
 INSERT INTO Branches VALUES ('B1','Prog2');
+
+INSERT INTO Programs VALUES ('Prog1', 'P1');
+INSERT INTO Programs VALUES ('Prog2', 'P2');
+
+
+INSERT INTO Departments VALUES ('Dep1', 'D1');
+INSERT INTO Departments VALUES ('Dep2', 'D2');
+
+
+INSERT INTO PartOfDepartment VALUES ('Prog1','Dep1');
+INSERT INTO PartOfDepartment VALUES ('Prog2','Dep2');
+INSERT INTO PartOfDepartment VALUES ('Prog1','Dep2');
+
 
 INSERT INTO Students VALUES ('1111111111','N1','ls1','Prog1');
 INSERT INTO Students VALUES ('2222222222','N2','ls2','Prog1');
@@ -13,12 +22,6 @@ INSERT INTO Students VALUES ('4444444444','N4','ls4','Prog1');
 INSERT INTO Students VALUES ('5555555555','Nx','ls5','Prog2');
 INSERT INTO Students VALUES ('6666666666','Nx','ls6','Prog2');
 
-INSERT INTO Departments VALUES ('Dep1', 'D1');
-INSERT INTO Departments VALUES ('Dep2', 'D2');
-
-INSERT INTO PartOfDepartment VALUES ('Prog1','Dep1');
-INSERT INTO PartOfDepartment VALUES ('Prog2','Dep2');
-INSERT INTO PartOfDepartment VALUES ('Prog1','Dep2');
 
 
 INSERT INTO Courses VALUES ('CCC111','C1',22.5,'Dep1');
@@ -27,8 +30,11 @@ INSERT INTO Courses VALUES ('CCC333','C3',30,'Dep1');
 INSERT INTO Courses VALUES ('CCC444','C4',60,'Dep1');
 INSERT INTO Courses VALUES ('CCC555','C5',50,'Dep1');
 
+
 INSERT INTO LimitedCourses VALUES ('CCC222',1);
 INSERT INTO LimitedCourses VALUES ('CCC333',2);
+INSERT INTO LimitedCourses VALUES ('CCC555',2);
+
 
 INSERT INTO Classifications VALUES ('math');
 INSERT INTO Classifications VALUES ('research');
@@ -59,6 +65,8 @@ INSERT INTO Registered VALUES ('1111111111','CCC333');
 INSERT INTO Registered VALUES ('2222222222','CCC222');
 INSERT INTO Registered VALUES ('5555555555','CCC222');
 INSERT INTO Registered VALUES ('5555555555','CCC333');
+INSERT INTO Registered VALUES ('5555555555','CCC555');
+
 
 INSERT INTO Taken VALUES('4444444444','CCC111','5');
 INSERT INTO Taken VALUES('4444444444','CCC222','5');
@@ -73,6 +81,9 @@ INSERT INTO Taken VALUES('2222222222','CCC111','U');
 INSERT INTO Taken VALUES('2222222222','CCC222','U');
 INSERT INTO Taken VALUES('2222222222','CCC444','U');
 
+INSERT INTO PreRequisites VALUES('CCC111', 'CCC444');
+
+--used timestamp instead, no 3rd argument needed
 INSERT INTO WaitingList VALUES('3333333333','CCC222');
 INSERT INTO WaitingList VALUES('3333333333','CCC333');
 INSERT INTO WaitingList VALUES('2222222222','CCC333');
